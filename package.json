@@ -18,5 +18,11 @@
   "license": "CC0-1.0",
   "devDependencies": {
     "electron": "^4.0.7"
+  },
+  "dependencies": {
+    "data-uri-to-buffer": "2.0.0",
+    "os": "0.1.1",
+    "fs": "0.0.1-security",
+    "path": "0.12.7"
   }
 }

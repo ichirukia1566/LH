@@ -31,6 +31,7 @@ const ctx = myCanvas.getContext('2d')
 const backgroundColor = '#fff'
 const lineColor = '#000'
 const lineWidth = 3
+const textColor = '#000'
 
 // <canvas>の背景を塗りつぶし
 clearCanvas()
@@ -63,6 +64,59 @@ function getPointOnCanvas (event) {
   return {x, y}
 }
 
+CanvasRenderingContext2D.prototype.fillTextVertical = function (text, x, y) {
+  var context = this;
+  var canvas = context.canvas;
+  
+  var arrText = text.split('');
+  var arrWidth = arrText.map(function (letter) {
+      return context.measureText(letter).width;
+  });
+  
+  var align = context.textAlign;
+  var baseline = context.textBaseline;
+  
+  if (align == 'left') {
+      x = x + Math.max.apply(null, arrWidth) / 2;
+  } else if (align == 'right') {
+      x = x - Math.max.apply(null, arrWidth) / 2;
+  }
+  if (baseline == 'bottom' || baseline == 'alphabetic' || baseline == 'ideographic') {
+      y = y - arrWidth[0] / 2;
+  } else if (baseline == 'top' || baseline == 'hanging') {
+      y = y + arrWidth[0] / 2;
+  }
+  
+  context.textAlign = 'center';
+  context.textBaseline = 'middle';
+  
+  // 开始逐字绘制
+  arrText.forEach(function (letter, index) {
+      // 确定下一个字符的纵坐标位置
+      var letterWidth = arrWidth[index];
+      // 是否需要旋转判断
+      var code = letter.charCodeAt(0);
+      if (code <= 256) {
+          context.translate(x, y);
+          // 英文字符，旋转90°
+          context.rotate(90 * Math.PI / 180);
+          context.translate(-x, -y);
+      } else if (index > 0 && text.charCodeAt(index - 1) < 256) {
+          // y修正
+          y = y + arrWidth[index - 1] / 2;
+      }
+      context.fillText(letter, x, y);
+      // 旋转坐标系还原成初始态
+      context.setTransform(1, 0, 0, 1, 0, 0);
+      // 确定下一个字符的纵坐标位置
+      var letterWidth = arrWidth[index];
+      y = y + letterWidth;
+  });
+  // 水平垂直对齐方式还原
+  context.textAlign = align;
+  context.textBaseline = baseline;
+};
+
 clearCanvasButton.addEventListener('click', clearCanvas, false)
 
 saveCanvasButton.addEventListener('click', saveCanvas, false)
@@ -75,21 +129,23 @@ myCanvas.addEventListener('mousedown', (event) => {
 
 myCanvas.addEventListener('mouseup', (event) => {
   event.preventDefault()
+  const endPoint = getPointOnCanvas(event)
+
+  ctx.strokeStyle = lineColor
+  ctx.lineWidth = lineWidth
+  ctx.beginPath()
+  ctx.rect(startPoint.x, startPoint.y, Math.abs(endPoint.x - startPoint.x), Math.abs(endPoint.y - startPoint.y));
+  ctx.stroke()
+
+  ctx.font = '24px Microsoft YaHei, sans-serif';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'top';
+  ctx.fillStyle = textColor
+  ctx.fillTextVertical('一般男性脱○系列', startPoint.x + 15, startPoint.y)
   drawing = false
 }, false)
 
 myCanvas.addEventListener('mousemove', (event) => {
   if (!drawing) return
   event.preventDefault()
-
-  const endPoint = getPointOnCanvas(event)
-
-  ctx.strokeStyle = lineColor
-  ctx.lineWidth = lineWidth
-  ctx.beginPath()
-  ctx.moveTo(startPoint.x, startPoint.y)
-  ctx.lineTo(endPoint.x, endPoint.y)
-  ctx.stroke()
-
-  startPoint = endPoint
 }, false)

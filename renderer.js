@@ -9,6 +9,9 @@ const os = require('os')
 const path = require('path')
 const fs = require('fs')
 const dataUriToBuffer = require('data-uri-to-buffer')
+const vex = require('vex-js')
+vex.registerPlugin(require('vex-dialog'))
+vex.defaultOptions.className = 'vex-theme-os'
 
 
 // ファイルの保存先
@@ -141,7 +144,14 @@ myCanvas.addEventListener('mouseup', (event) => {
   ctx.textAlign = 'center';
   ctx.textBaseline = 'top';
   ctx.fillStyle = textColor
-  ctx.fillTextVertical('一般男性脱○系列', startPoint.x + 15, startPoint.y)
+  vex.dialog.prompt({
+    message: '你说你' + String.fromCodePoint('0x1F434') + '呢？',
+    placeholder: String.fromCodePoint('0x00BF'),
+    callback: function (value) {
+      ctx.fillTextVertical(value, startPoint.x + 15, startPoint.y)
+    }
+})
+  
   drawing = false
 }, false)
 

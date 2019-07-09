@@ -1,22 +1,69 @@
 <!DOCTYPE html>
 <html>
+    <head>
+        <meta charset="UTF-8" />
+        <title>Canvas test</title>
+        <style>
+            body {
+                background: #dddddd;
+            }
 
-<head>
-  <meta charset="UTF-8">
-  <title>Canvas test</title>
-</head>
+            #my-canvas {
+                background: #ffffff;
+                border: thin solid #aaaaaa;
+            }
 
-<body>
-  <div>
-    <button id="clear-canvas">クリア</button>
-    <button id="save-canvas">ファイルに保存</button>
-  </div>
-  <canvas id="my-canvas" width="960" height="1080" style="border: solid black 1px;" />
+            .dialog {
+                position: absolute;
+                background: rgba(0, 0, 0, 0.3);
+                border: thin solid rgba(0, 0, 0, 0.6);
+                color: #eeeeee;
+                width: 20px;
+                max-width: 20px;
+                font-family: Droid Sans, Arial, Helvetica, sans-serif;
+                font-size: 12px;
+                box-shadow: rgba(0, 0, 0, 0.5) 5px 5px 20px;
+            }
 
-  <script>
-    // You can also require other files to run in this process
-    require('./renderer.js')
-  </script>
-</body>
+            .dialog1 {
+                position: absolute;
+                left: 20px;
+                background: rgba(0, 0, 0, 0.3);
+                border: thin solid rgba(0, 0, 0, 0.6);
+                color: #eeeeee;
+                width: 20px;
+                max-width: 20px;
+                height: 60px;
+                max-height: 60px;
+                font-family: Droid Sans, Arial, Helvetica, sans-serif;
+                font-size: 12px;
+                box-shadow: rgba(0, 0, 0, 0.5) 5px 5px 20px;
+            }
 
+            .dialog p {
+                margin: 10px;
+                color: rgba(0, 0, 0, 1);
+                font-size: 12pt;
+            }
+        </style>
+    </head>
+
+    <body>
+        <div>
+            <button id="clear-canvas">クリア</button>
+            <button id="save-canvas">ファイルに保存</button>
+        </div>
+          <div class="dialog">
+            <p>Test test test</p>
+          </div>
+          <div class="dialog1">
+            <p>nsnmn</p>
+          </div>
+        <canvas id="my-canvas" width="640" height="960"></canvas>
+        
+        <script>
+            // You can also require other files to run in this process
+            require('./renderer.js')
+        </script>
+    </body>
 </html>
